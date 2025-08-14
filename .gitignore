@@ -1,0 +1,77 @@
+# Build-Outputs
+[Bb]in/
+[Oo]bj/
+out/
+publish/
+artifacts/
+
+# User-specific files
+*.user
+*.userosscache
+*.suo
+*.sln.docstates
+
+# Rider/JetBrains
+.idea/
+*.sln.iml
+
+# VS Code
+.vscode/
+.history/
+*.code-workspace
+
+# Avalonia Designer Cache
+.avalonia/
+
+# Paketmanager
+# NuGet
+*.nupkg
+*.snupkg
+# Lokaler Paket-Cache
+packages/
+# Paket-Wiederherstellung
+project.lock.json
+project.fragment.lock.json
+artifacts/
+
+# OS-spezifische Dateien
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Linux
+*~
+.nfs*
+
+# Windows
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+
+# Logs
+*.log
+*.tlog
+
+# Temporäre Dateien
+*.tmp
+*.bak
+*.swp
+*.swn
+*.swm
+*.swo
+
+# Tests
+TestResults/
+*.coverage
+*.coveragexml
+_coverage/
+
+# Resharper
+_ReSharper*/
+*.[Rr]e[Ss]harper
+*.DotSettings.user
+
+# Optional: Lokale Konfiguration
+*.local.json
