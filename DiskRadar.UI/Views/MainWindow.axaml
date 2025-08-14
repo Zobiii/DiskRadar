@@ -1,20 +1,32 @@
 <Window xmlns="https://github.com/avaloniaui"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:vm="using:DiskRadar.UI.ViewModels"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+        xmlns:vm="using:DiskRadar.UI.ViewModels"
+        xmlns:ctrl="using:DiskRadar.UI.Controls"
         x:Class="DiskRadar.UI.Views.MainWindow"
-        x:DataType="vm:MainWindowViewModel"
-        Icon="/Assets/avalonia-logo.ico"
-        Title="DiskRadar.UI">
+        Title="DiskRadar" Width="1000" Height="700">
+  <DockPanel>
+    <!-- Toolbar -->
+    <StackPanel Orientation="Horizontal" DockPanel.Dock="Top" Spacing="8" Margin="8">
+      <TextBox Width="400" Watermark="Pfad..." Text="{Binding Path, Mode=TwoWay}"/>
+      <Button Content="Scan" Command="{Binding ScanCommand}"/>
+      <Button Content="Abbrechen" Command="{Binding CancelCommand}" IsEnabled="{Binding IsScanning}"/>
+      <TextBlock Margin="12,0,0,0" VerticalAlignment="Center"
+                 Text="{Binding Root.SizeBytes, Converter={x:Static ObjectConverters.SizeToHuman}}" />
+      <TextBlock Margin="12,0,0,0" VerticalAlignment="Center"
+                 Text="{Binding HoverNode.Name}"/>
+      <TextBlock Margin="6,0,0,0" VerticalAlignment="Center"
+                 Text="{Binding HoverNode.SizeBytes, Converter={x:Static ObjectConverters.SizeToHuman}}"/>
+      <CheckBox Content="Konsole (stdout)" IsChecked="True" IsEnabled="False"/>
+    </StackPanel>
 
-    <Design.DataContext>
-        <!-- This only sets the DataContext for the previewer in an IDE,
-             to set the actual DataContext for runtime, set the DataContext property in code (look at App.axaml.cs) -->
-        <vm:MainWindowViewModel/>
-    </Design.DataContext>
-
-    <TextBlock Text="{Binding Greeting}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-
+    <!-- Hauptbereich -->
+    <Grid ColumnDefinitions="*, 320">
+      <ctrl:SunburstChart DataContext="{Binding}" Grid.Column="0"
+                          Root="{Binding Root}" HoverNode="{Binding HoverNode, Mode=TwoWay}"/>
+      <Border Grid.Column="1" Margin="8" Padding="8" BorderBrush="Gray" BorderThickness="1">
+        <ItemsControl Items="{Binding LogLines}"/>
+      </Border>
+    </Grid>
+  </DockPanel>
 </Window>

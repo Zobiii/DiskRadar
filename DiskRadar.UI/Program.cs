@@ -1,21 +1,34 @@
-﻿using Avalonia;
-using System;
+﻿using System;
+using System.Linq;
+using Avalonia;
+using Avalonia.Controls.ApplicationLifetimes;
+using Avalonia.ReactiveUI;
+using DiskRadar.Core.Services;
+using DiskRadar.UI;
+using DiskRadar.UI.ViewModels;
+using DiskRadar.UI.Views;
+using Microsoft.Extensions.Logging;
 
-namespace DiskRadar.UI;
-
-sealed class Program
+internal static class Program
 {
-    // Initialization code. Don't use any Avalonia, third-party APIs or any
-    // SynchronizationContext-reliant code before AppMain is called: things aren't initialized
-    // yet and stuff might break.
     [STAThread]
-    public static void Main(string[] args) => BuildAvaloniaApp()
-        .StartWithClassicDesktopLifetime(args);
+    public static void Main(string[] args)
+    {
+        var app = BuildAvaloniaApp();
 
-    // Avalonia configuration, don't remove; also used by visual designer.
+        // Optional: "--console" öffnet Log in StdOut (wenn aus GUI gestartet)
+        bool withConsole = args.Contains("--console");
+        using var loggerFactory = LoggerFactory.Create(b =>
+        {
+            if (withConsole) b.AddSimpleConsole();
+        });
+
+        var scanner = new DiskScanner(log: loggerFactory.CreateLogger<DiskScanner>());
+        var vm = new MainViewModel(scanner, loggerFactory.CreateLogger<MainViewModel>());
+
+        app.StartWithClassicDesktopLifetime(args);
+    }
+
     public static AppBuilder BuildAvaloniaApp()
-        => AppBuilder.Configure<App>()
-            .UsePlatformDetect()
-            .WithInterFont()
-            .LogToTrace();
+        => AppBuilder.Configure<App>().UsePlatformDetect().UseReactiveUI().LogToTrace();
 }
